@@ -1,10 +1,14 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 
+import Constants from "expo-constants";
+
+const { apiKey, authDomain, projectId }: any = Constants?.manifest?.extra;
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBfo5JvG1xmOkkmLbaROjQvvE8QCKE8_v0",
-  authDomain: "react-native-starter-ee65c.firebaseapp.com",
-  projectId: "react-native-starter-ee65c",
+  apiKey,
+  authDomain,
+  projectId,
 };
 
 const Firebase = firebase.initializeApp(firebaseConfig);
