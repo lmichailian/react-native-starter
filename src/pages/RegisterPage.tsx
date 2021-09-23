@@ -1,39 +1,46 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/common/Button";
 import RoundedButton from "../components/common/RoundedButton";
 import TextInput from "../components/common/TextInput";
 import TextLink from "../components/common/TextLink";
 import { colors, dimen } from "../utils";
 
-function RegisterPage() {
+interface ResetScreenProps {
+  navigation: any;
+}
+
+function RegisterPage({ navigation }: ResetScreenProps) {
   return (
-    <View style={styles.container}>
-      <View style={styles.mainContent}>
-        <Text style={styles.title}>Register</Text>
-        <TextInput placeholder="Fullname" />
-        <TextInput keyboardType={"email-address"} placeholder="Email" />
-        <TextInput secureTextEntry placeholder="Password" />
-        <TextInput secureTextEntry placeholder="Confirm" />
-        <Button onPress={() => console.log("test")}>Register</Button>
-        <TextLink
-          onPress={() => alert("forget")}
-          align="center"
-          style={styles.join}
-        >
-          Are you a member ? Log In
-        </TextLink>
+    <SafeAreaView style={styles.containerSafe}>
+      <View style={styles.container}>
+        <View style={styles.mainContent}>
+          <Text style={styles.title}>Register</Text>
+          <TextInput placeholder="Fullname" />
+          <TextInput keyboardType={"email-address"} placeholder="Email" />
+          <TextInput secureTextEntry placeholder="Password" />
+          <TextInput secureTextEntry placeholder="Confirm" />
+          <Button onPress={() => navigation.push("Register")}>Register</Button>
+          <TextLink
+            onPress={() => navigation.push("Login")}
+            align="center"
+            style={styles.join}
+          >
+            Are you a member ? Log In
+          </TextLink>
+        </View>
+        <Text style={styles.bottomText}>Or register with social</Text>
+        <View style={styles.socialButtons}>
+          <RoundedButton
+            size={28}
+            icon={"facebook"}
+            style={styles.facebookButton}
+          />
+          <RoundedButton size={28} icon={"google"} />
+        </View>
       </View>
-      <Text style={styles.bottomText}>Or register with social</Text>
-      <View style={styles.socialButtons}>
-        <RoundedButton
-          size={28}
-          icon={"facebook"}
-          style={styles.facebookButton}
-        />
-        <RoundedButton size={28} icon={"google"} />
-      </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -41,6 +48,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    padding: dimen.baseUnit * 2,
+  },
+  containerSafe: {
+    flex: 1,
   },
   mainContent: {
     flex: 1,

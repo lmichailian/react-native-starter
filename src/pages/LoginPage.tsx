@@ -7,7 +7,11 @@ import TextInput from "../components/common/TextInput";
 import TextLink from "../components/common/TextLink";
 import { colors, dimen } from "../utils";
 
-function LoginPage() {
+interface LoginProps {
+  navigation: any;
+}
+
+function LoginPage({ navigation }: LoginProps) {
   return (
     <SafeAreaView style={styles.containerSafe}>
       <View style={styles.container}>
@@ -16,7 +20,7 @@ function LoginPage() {
           <TextInput keyboardType={"email-address"} placeholder="Email" />
           <TextInput secureTextEntry placeholder="Password" />
           <TextLink
-            onPress={() => alert("forget")}
+            onPress={() => navigation.push("Reset")}
             align="right"
             style={styles.link}
           >
@@ -24,7 +28,7 @@ function LoginPage() {
           </TextLink>
           <Button onPress={() => console.log("test")}>Log In</Button>
           <TextLink
-            onPress={() => alert("forget")}
+            onPress={() => navigation.push("Join")}
             align="center"
             style={styles.join}
           >
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
     padding: dimen.baseUnit * 2,
   },
   containerSafe: {
-    flex: 1
+    flex: 1,
   },
   mainContent: {
     flex: 1,

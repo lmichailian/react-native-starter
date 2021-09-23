@@ -5,6 +5,8 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import LoginPage from "./src/pages/LoginPage";
 import { dimen } from "./src/utils";
+import ResetPage from "./src/pages/ResetPage";
+import RegisterPage from "./src/pages/RegisterPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +19,8 @@ export default function App() {
           {isSigned ? null : (
             <>
               <Stack.Screen name="Login" component={LoginPage} />
+              <Stack.Screen name="Reset" component={ResetPage} />
+              <Stack.Screen name="Join" component={RegisterPage} />
             </>
           )}
         </Stack.Navigator>

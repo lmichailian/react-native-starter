@@ -1,27 +1,34 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/common/Button";
 import RoundedButton from "../components/common/RoundedButton";
 import TextInput from "../components/common/TextInput";
 import TextLink from "../components/common/TextLink";
 import { colors, dimen } from "../utils";
 
-function ResetPage() {
+interface ResetScreenProps {
+  navigation: any;
+}
+
+function ResetPage({ navigation }: ResetScreenProps) {
   return (
-    <View style={styles.container}>
-      <View style={styles.mainContent}>
-        <Text style={styles.title}>Reset</Text>
-        <TextInput keyboardType={"email-address"} placeholder="Email" />
-        <Button onPress={() => console.log("test")}>Reset</Button>
-        <TextLink
-          onPress={() => alert("forget")}
-          align="center"
-          style={styles.join}
-        >
-          Are you a member ? Log In
-        </TextLink>
+    <SafeAreaView style={styles.containerSafe}>
+      <View style={styles.container}>
+        <View style={styles.mainContent}>
+          <Text style={styles.title}>Reset</Text>
+          <TextInput keyboardType={"email-address"} placeholder="Email" />
+          <Button onPress={() => console.log("test")}>Reset</Button>
+          <TextLink
+            onPress={() => navigation.push('Login')}
+            align="center"
+            style={styles.join}
+          >
+            Are you a member ? Log In
+          </TextLink>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -29,6 +36,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    padding: dimen.baseUnit * 2,
+  },
+  containerSafe: {
+    flex: 1,
   },
   mainContent: {
     flex: 1,
