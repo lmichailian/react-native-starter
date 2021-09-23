@@ -3,10 +3,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import React from "react";
 import { StyleSheet } from "react-native";
-import LoginPage from "./src/pages/LoginPage";
-import { dimen } from "./src/utils";
-import ResetPage from "./src/pages/ResetPage";
-import RegisterPage from "./src/pages/RegisterPage";
+import LoginScreen from "./src/screens/LoginScreen";
+import ResetScreen from "./src/screens/ResetScreen";
+import RegisterScreen from "./src/screens/RegisterScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,9 +17,9 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: isSigned }}>
           {isSigned ? null : (
             <>
-              <Stack.Screen name="Login" component={LoginPage} />
-              <Stack.Screen name="Reset" component={ResetPage} />
-              <Stack.Screen name="Join" component={RegisterPage} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Reset" component={ResetScreen} />
+              <Stack.Screen name="Join" component={RegisterScreen} />
             </>
           )}
         </Stack.Navigator>

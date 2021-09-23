@@ -11,7 +11,7 @@ interface LoginProps {
   navigation: any;
 }
 
-function LoginPage({ navigation }: LoginProps) {
+function LoginScreen({ navigation }: LoginProps) {
   return (
     <SafeAreaView style={styles.containerSafe}>
       <View style={styles.container}>
@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default LoginScreen;
