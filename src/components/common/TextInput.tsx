@@ -27,7 +27,7 @@ interface RootStyles {
 
 interface TextInputPropsCustom extends TextInputProps {
   rootStylesOverride?: RootStyles;
-  error?: string | boolean;
+  error?: any;
 }
 
 function TextInput(props: TextInputPropsCustom) {
@@ -64,8 +64,8 @@ function TextInput(props: TextInputPropsCustom) {
         )}
         {error && <MaterialIcons name="cancel" style={styles.errorIcon} />}
       </View>
-      {error && typeof error === "string" && (
-        <Text style={styles.errorMessage}>{error}</Text>
+      {error && error.message && (
+        <Text style={styles.errorMessage}>{error.message}</Text>
       )}
     </>
   );

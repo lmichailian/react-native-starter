@@ -1,4 +1,5 @@
 import React from "react";
+import { AuthProvider } from "./AuthContext";
 
 type Props = {
   contexts: any;
@@ -14,7 +15,7 @@ const ProviderComposer: React.FC<Props> = ({ contexts, children }) =>
   );
 
 const GlobalStateProvider: React.FC = ({ children }) => (
-  <ProviderComposer contexts={[]}>{children}</ProviderComposer>
+  <ProviderComposer contexts={[<AuthProvider />]}>{children}</ProviderComposer>
 );
 
 export { GlobalStateProvider };

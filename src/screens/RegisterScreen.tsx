@@ -1,4 +1,5 @@
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Text, View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/common/Button";
@@ -11,17 +12,117 @@ interface ResetScreenProps {
   navigation: any;
 }
 
+type FormData = {
+  confirm: string;
+  email: string;
+  fullname: string;
+  password: string;
+}
+
 function RegisterPage({ navigation }: ResetScreenProps) {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    getValues,
+  } = useForm();
+
+  function onSubmit(data: FormData) {
+    console.log(data)
+  }
+
   return (
     <SafeAreaView style={styles.containerSafe}>
       <View style={styles.container}>
         <View style={styles.mainContent}>
           <Text style={styles.title}>Register</Text>
-          <TextInput placeholder="Fullname" />
-          <TextInput keyboardType={"email-address"} placeholder="Email" />
-          <TextInput secureTextEntry placeholder="Password" />
-          <TextInput secureTextEntry placeholder="Confirm" />
-          <Button onPress={() => navigation.push("Register")}>Register</Button>
+          <Controller
+            control={control}
+            rules={{ required: "Required Field" }}
+            render={({ field: { value, onBlur } }) => (
+              <TextInput
+                error={errors["fullname"]}
+                placeholder="Fullname"
+                onChangeText={(text) =>
+                  setValue("fullname", text, { shouldValidate: true })
+                }
+                value={value}
+              />
+            )}
+            defaultValue=""
+            name="fullname"
+          />
+
+          <Controller
+            control={control}
+            rules={{
+              required: "Required Field",
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "Entered value does not match email format",
+              },
+            }}
+            render={({ field: { value } }) => (
+              <TextInput
+                error={errors["email"]}
+                placeholder="Email"
+                onChangeText={(text) =>
+                  setValue("email", text, { shouldValidate: true })
+                }
+                value={value}
+                keyboardType={"email-address"}
+              />
+            )}
+            defaultValue=""
+            name="email"
+          />
+
+          <Controller
+            rules={{ required: "Required Field" }}
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                error={errors["password"]}
+                placeholder="Password"
+                secureTextEntry
+                onChangeText={(text) =>
+                  setValue("password", text, { shouldValidate: true })
+                }
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            defaultValue=""
+            name="password"
+          />
+
+          <Controller
+            rules={{
+              required: "Required Field",
+              validate: {
+                confirmed: (value) =>
+                  getValues("password") === value ||
+                  "The passwords do not match",
+              },
+            }}
+            control={control}
+            render={({ field: { value } }) => (
+              <TextInput
+                error={errors["confirm"]}
+                placeholder="Confirm"
+                secureTextEntry
+                onChangeText={(text) =>
+                  setValue("confirm", text, { shouldValidate: true })
+                }
+                value={value}
+              />
+            )}
+            defaultValue=""
+            name="confirm"
+          />
+
+          <Button onPress={handleSubmit(onSubmit)}>Register</Button>
           <TextLink
             onPress={() => navigation.push("Login")}
             align="center"
