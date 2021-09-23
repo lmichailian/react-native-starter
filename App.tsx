@@ -1,22 +1,33 @@
-import { StatusBar } from "expo-status-bar";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import React from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import LoginPage from "./src/pages/LoginPage";
 import { dimen } from "./src/utils";
 
+const Stack = createNativeStackNavigator();
+
 export default function App() {
+  const isSigned = false;
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
-      <LoginPage />
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: isSigned }}>
+          {isSigned ? null : (
+            <>
+              <Stack.Screen name="Login" component={LoginPage} />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: dimen.baseUnit * 2,
     backgroundColor: "#fff",
   },
 });

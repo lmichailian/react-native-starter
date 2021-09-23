@@ -1,9 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
-
-import Constants from "expo-constants";
-
-const { apiKey, authDomain, projectId }: any = Constants?.manifest?.extra;
+import { apiKey, authDomain, projectId } from "../../config/init";
 
 const firebaseConfig = {
   apiKey,
