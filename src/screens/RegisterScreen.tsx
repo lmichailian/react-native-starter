@@ -8,7 +8,8 @@ import TextInput from "../components/common/TextInput";
 import TextLink from "../components/common/TextLink";
 import { AuthContext } from "../state/AuthContext";
 import { colors, dimen } from "../utils";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Toast from "react-native-root-toast";
 interface ResetScreenProps {
   navigation: any;
 }
@@ -33,12 +34,20 @@ function RegisterPage({ navigation }: ResetScreenProps) {
 
   async function onSubmit(data: FormData) {
     const { fullname, password, email } = data;
-    await authContext.register(fullname, email, password);
+    try {
+      await authContext.register(fullname, email, password);
+    } catch (err: any) {
+      Toast.show(err.message, {
+        backgroundColor: colors.error,
+        shadow: false,
+        duration: Toast.durations.LONG,
+      });
+    }
   }
 
   return (
     <SafeAreaView style={styles.containerSafe}>
-      <View style={styles.container}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <View style={styles.mainContent}>
           <Text style={styles.title}>Register</Text>
           <Controller
@@ -154,7 +163,7 @@ function RegisterPage({ navigation }: ResetScreenProps) {
           />
           <RoundedButton size={28} icon={"google"} />
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

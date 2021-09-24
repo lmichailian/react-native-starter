@@ -28,6 +28,7 @@ interface RootStyles {
 interface TextInputPropsCustom extends TextInputProps {
   rootStylesOverride?: RootStyles;
   error?: any;
+  ref?: any
 }
 
 function TextInput(props: TextInputPropsCustom) {

@@ -1,24 +1,100 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Text, View, StyleSheet } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Toast from "react-native-root-toast";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/common/Button";
 import RoundedButton from "../components/common/RoundedButton";
 import TextInput from "../components/common/TextInput";
 import TextLink from "../components/common/TextLink";
+import { AuthContext } from "../state/AuthContext";
 import { colors, dimen } from "../utils";
 
 interface LoginProps {
   navigation: any;
 }
 
+interface FormData {
+  email: string;
+  password: string;
+}
+
 function LoginScreen({ navigation }: LoginProps) {
+  const authContext = useContext(AuthContext);
+
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
+  async function onSubmit({ email, password }: FormData) {
+    try {
+      await authContext.login(email, password);
+    } catch (err: any) {
+      Toast.show(err.message, {
+        backgroundColor: colors.error,
+        shadow: false,
+        duration: Toast.durations.LONG,
+      });
+    }
+  }
+
   return (
     <SafeAreaView style={styles.containerSafe}>
-      <View style={styles.container}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <View style={styles.mainContent}>
           <Text style={styles.title}>Welcome</Text>
-          <TextInput keyboardType={"email-address"} placeholder="Email" />
-          <TextInput secureTextEntry placeholder="Password" />
+          <Controller
+            control={control}
+            rules={{
+              required: "Required Field",
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "Entered value does not match email format",
+              },
+            }}
+            render={({ field: { value } }) => (
+              <TextInput
+                error={errors["email"]}
+                placeholder="Email"
+                onChangeText={(text) =>
+                  setValue("email", text, { shouldValidate: true })
+                }
+                value={value}
+                keyboardType={"email-address"}
+              />
+            )}
+            defaultValue=""
+            name="email"
+          />
+
+          <Controller
+            rules={{
+              required: "Required Field",
+              minLength: {
+                message: "Almost 6 characters",
+                value: 6,
+              },
+            }}
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                error={errors["password"]}
+                placeholder="Password"
+                secureTextEntry
+                onChangeText={(text) =>
+                  setValue("password", text, { shouldValidate: true })
+                }
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            defaultValue=""
+            name="password"
+          />
           <TextLink
             onPress={() => navigation.push("Reset")}
             align="right"
@@ -26,7 +102,7 @@ function LoginScreen({ navigation }: LoginProps) {
           >
             Forgot password ?
           </TextLink>
-          <Button onPress={() => console.log("test")}>Log In</Button>
+          <Button onPress={handleSubmit(onSubmit)}>Log In</Button>
           <TextLink
             onPress={() => navigation.push("Join")}
             align="center"
@@ -44,7 +120,7 @@ function LoginScreen({ navigation }: LoginProps) {
           />
           <RoundedButton size={28} icon={"google"} />
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
