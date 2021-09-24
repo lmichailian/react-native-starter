@@ -1,10 +1,25 @@
 import React, { createContext } from "react";
+import Firebase from "../lib/firebase/Firebase";
+import { User } from "@firebase/auth-types";
+interface ContextState {
+  register: (fullname: string, email: string, password: string) => void;
+}
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext({} as ContextState);
 
 export function AuthProvider(props: any) {
-  function register(email: string, password: string) {
+  async function register(fullname: string, email: string, password: string) {
+    try {
+      const currentUser = await Firebase.auth().currentUser;
       
+      await Firebase.auth().createUserWithEmailAndPassword(email, password);
+
+      await currentUser?.updateProfile({
+        displayName: fullname,
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (

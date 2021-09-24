@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Text, View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -6,6 +6,7 @@ import Button from "../components/common/Button";
 import RoundedButton from "../components/common/RoundedButton";
 import TextInput from "../components/common/TextInput";
 import TextLink from "../components/common/TextLink";
+import { AuthContext } from "../state/AuthContext";
 import { colors, dimen } from "../utils";
 
 interface ResetScreenProps {
@@ -17,9 +18,11 @@ type FormData = {
   email: string;
   fullname: string;
   password: string;
-}
+};
 
 function RegisterPage({ navigation }: ResetScreenProps) {
+  const authContext = useContext(AuthContext);
+
   const {
     control,
     handleSubmit,
@@ -28,8 +31,9 @@ function RegisterPage({ navigation }: ResetScreenProps) {
     getValues,
   } = useForm();
 
-  function onSubmit(data: FormData) {
-    console.log(data)
+  async function onSubmit(data: FormData) {
+    const { fullname, password, email } = data;
+    await authContext.register(fullname, email, password);
   }
 
   return (
@@ -79,7 +83,13 @@ function RegisterPage({ navigation }: ResetScreenProps) {
           />
 
           <Controller
-            rules={{ required: "Required Field" }}
+            rules={{
+              required: "Required Field",
+              minLength: {
+                message: "Almost 6 characters",
+                value: 6,
+              },
+            }}
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -100,6 +110,10 @@ function RegisterPage({ navigation }: ResetScreenProps) {
           <Controller
             rules={{
               required: "Required Field",
+              minLength: {
+                message: "Almost 6 characters",
+                value: 6,
+              },
               validate: {
                 confirmed: (value) =>
                   getValues("password") === value ||
