@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import LoginScreen from "../screens/LoginScreen";
 import ResetScreen from "../screens/ResetScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { AuthContext } from "../state/AuthContext";
+import HomeScreen from "../screens/HomeScreen";
 const Stack = createNativeStackNavigator();
 
 function Navigation() {
-  const isSigned = false;
+  const { currentUser } = useContext(AuthContext);
+  
+  const isSigned = !!currentUser
+    
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: isSigned }}>
-        {isSigned ? null : (
+        {isSigned ? <Stack.Screen name="Home" component={HomeScreen} /> : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Reset" component={ResetScreen} />
@@ -23,4 +28,4 @@ function Navigation() {
   );
 }
 
-export default Navigation
+export default Navigation;

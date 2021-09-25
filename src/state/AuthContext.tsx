@@ -19,7 +19,7 @@ export function AuthProvider(props: any) {
   }, []);
 
   async function getActiveSession() {
-    const currentUser = await Firebase.auth().currentUser;
+    const currentUser = Firebase.auth().currentUser;
     setCurrentUser(currentUser);
   }
 
