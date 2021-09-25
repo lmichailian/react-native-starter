@@ -6,6 +6,7 @@ import Firebase from "../lib/firebase/Firebase";
 interface ContextState {
   register: (fullname: string, email: string, password: string) => void;
   login: (email: string, password: string) => void;
+  reset: (email: string) => void;
   logout: () => void;
   currentUser: User | null;
   appLoading: boolean;
@@ -68,6 +69,8 @@ export function AuthProvider(props: any) {
     try {
       await Firebase.auth().signInWithEmailAndPassword(email, password);
       console.log(`[LOGGED] ${email}`);
+      const currentUser = await Firebase.auth().currentUser;
+      setCurrentUser(currentUser);
     } catch (err: any) {
       console.log("[LOGIN ERROR]", err);
       if (
@@ -90,9 +93,18 @@ export function AuthProvider(props: any) {
     }
   }
 
+  async function reset(email: string) {
+    try {
+      await Firebase.auth().sendPasswordResetEmail(email);
+    } catch (err: any) {
+      console.log("[RESET ERROR]", err);
+      throw err;
+    }
+  }
+
   return (
     <AuthContext.Provider
-      value={{ register, login, logout, appLoading, currentUser: me }}
+      value={{ register, login, logout, reset, appLoading, currentUser: me }}
     >
       {props.children}
     </AuthContext.Provider>

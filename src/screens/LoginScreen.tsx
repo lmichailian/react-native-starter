@@ -80,7 +80,7 @@ function LoginScreen({ navigation }: LoginProps) {
               },
             }}
             control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { value } }) => (
               <TextInput
                 error={errors["password"]}
                 placeholder="Password"
@@ -88,7 +88,6 @@ function LoginScreen({ navigation }: LoginProps) {
                 onChangeText={(text) =>
                   setValue("password", text, { shouldValidate: true })
                 }
-                onBlur={onBlur}
                 value={value}
               />
             )}
