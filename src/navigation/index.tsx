@@ -9,9 +9,10 @@ import HomeScreen from "../screens/HomeScreen";
 const Stack = createNativeStackNavigator();
 
 function Navigation() {
-  const { currentUser } = useContext(AuthContext);
-  
+  const { currentUser, appLoading } = useContext(AuthContext);
   const isSigned = !!currentUser
+
+  if (appLoading) return null
     
   return (
     <NavigationContainer>

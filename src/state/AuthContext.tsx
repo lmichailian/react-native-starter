@@ -6,32 +6,56 @@ import Firebase from "../lib/firebase/Firebase";
 interface ContextState {
   register: (fullname: string, email: string, password: string) => void;
   login: (email: string, password: string) => void;
+  logout: () => void;
   currentUser: User | null;
+  appLoading: boolean;
 }
 
 export const AuthContext = createContext({} as ContextState);
 
 export function AuthProvider(props: any) {
   const [me, setCurrentUser] = useState<User | null>(null);
+  const [appLoading, setAppLoading] = useState(true);
 
   useEffect(() => {
-    getActiveSession();
+    const unsubscribe = getInitialSessionStatus(setAppLoading, appLoading);
+
+    return () => {
+      return unsubscribe();
+    };
   }, []);
 
-  async function getActiveSession() {
-    const currentUser = Firebase.auth().currentUser;
-    setCurrentUser(currentUser);
-  }
+  const getInitialSessionStatus = function (
+    callback: Function,
+    appLoading: boolean
+  ) {
+    return Firebase.auth().onAuthStateChanged(
+      (user) => {
+        if (appLoading) {
+          setCurrentUser(user);
+          callback(false);
+        }
+      },
+      (err) => {
+        console.log("[INIT ERROR]", err);
+        setAppLoading(false);
+      }
+    );
+  };
 
   async function register(fullname: string, email: string, password: string) {
     try {
-      const currentUser = await Firebase.auth().currentUser;
-
       await Firebase.auth().createUserWithEmailAndPassword(email, password);
+
+      const currentUser = await Firebase.auth().currentUser;
 
       await currentUser?.updateProfile({
         displayName: fullname,
       });
+
+      console.log("AUTH SCREEN");
+
+      setCurrentUser(currentUser);
 
       console.log(`[LOGGED] ${email}`);
     } catch (err: any) {
@@ -56,8 +80,20 @@ export function AuthProvider(props: any) {
     }
   }
 
+  async function logout() {
+    try {
+      await Firebase.auth().signOut();
+      setCurrentUser(null);
+    } catch (err: any) {
+      console.log("[LOGOUT ERROR]", err);
+      throw err;
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ register, login, currentUser: me }}>
+    <AuthContext.Provider
+      value={{ register, login, logout, appLoading, currentUser: me }}
+    >
       {props.children}
     </AuthContext.Provider>
   );
