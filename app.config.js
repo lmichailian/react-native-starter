@@ -9,6 +9,7 @@ export default {
       apiKey: process.env.FIREBASE_API_KEY,
       authDomain: process.env.AUTH_DOMAIN,
       projectId: process.env.PROJECT_ID,
+      fbAppId: process.env.FB_APP_ID
     },
     orientation: "portrait",
     icon: "./assets/icon.png",
@@ -22,9 +23,11 @@ export default {
     },
     assetBundlePatterns: ["**/*"],
     ios: {
+      bundleIdentifier: "com.rnstarter.app",
       supportsTablet: true,
     },
     android: {
+      package: "com.rnstarter.app",
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#FFFFFF",

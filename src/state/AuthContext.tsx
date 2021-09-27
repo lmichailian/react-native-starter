@@ -1,6 +1,8 @@
 import { User } from "@firebase/auth-types";
 import React, { createContext, useEffect, useState } from "react";
+import { fbAppId } from "../config/init";
 import { AuthErrors } from "../lib/firebase/ErrorCodes";
+import * as Facebook from "expo-facebook";
 import Firebase from "../lib/firebase/Firebase";
 
 interface ContextState {
@@ -8,6 +10,7 @@ interface ContextState {
   login: (email: string, password: string) => void;
   reset: (email: string) => void;
   logout: () => void;
+  loginWithFacebook: () => void;
   currentUser: User | null;
   appLoading: boolean;
 }
@@ -83,6 +86,31 @@ export function AuthProvider(props: any) {
     }
   }
 
+  async function loginWithFacebook() {
+    try {
+      await Facebook.initializeAsync({
+        appId: "254710843207992",
+      });
+      console.log(fbAppId);
+      const { token, type } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ["public_profile"],
+      });
+
+      if (type === "success") {
+        const credential = Firebase.auth.FacebookAuthProvider.credential(token);
+        const facebookProfileData = await Firebase.auth().signInWithCredential(
+          credential
+        );
+
+        setCurrentUser(facebookProfileData.user);
+      } else {
+        console.log("Cancelled");
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async function logout() {
     try {
       await Firebase.auth().signOut();
@@ -104,7 +132,15 @@ export function AuthProvider(props: any) {
 
   return (
     <AuthContext.Provider
-      value={{ register, login, logout, reset, appLoading, currentUser: me }}
+      value={{
+        register,
+        login,
+        logout,
+        reset,
+        appLoading,
+        currentUser: me,
+        loginWithFacebook,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

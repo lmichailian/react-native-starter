@@ -113,6 +113,7 @@ function LoginScreen({ navigation }: LoginProps) {
         <Text style={styles.bottomText}>Or login with social</Text>
         <View style={styles.socialButtons}>
           <RoundedButton
+            onPress={authContext.loginWithFacebook}
             size={28}
             icon={"facebook"}
             style={styles.facebookButton}

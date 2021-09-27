@@ -4,15 +4,16 @@ import { TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 interface RoundedButtonProps {
   icon?: keyof typeof MaterialCommunityIcons.glyphMap;
+  onPress?: () => void;
   size?: number;
   style?: ViewStyle;
   children?: string | ReactNode;
 }
 
 function RoundedButton(props: RoundedButtonProps) {
-  const { icon, children, size, style } = props;
+  const { icon, children, size, style, onPress } = props;
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View style={style}>
         <MaterialCommunityIcons size={size} name={icon} />
         {children}
