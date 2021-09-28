@@ -11,6 +11,7 @@ export default {
       projectId: process.env.PROJECT_ID,
       fbAppId: process.env.FB_APP_ID
     },
+    facebookAppId: process.env.FB_APP_ID,
     orientation: "portrait",
     icon: "./assets/icon.png",
     splash: {

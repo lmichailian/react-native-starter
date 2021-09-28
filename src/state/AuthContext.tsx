@@ -88,12 +88,10 @@ export function AuthProvider(props: any) {
 
   async function loginWithFacebook() {
     try {
-      await Facebook.initializeAsync({
-        appId: "254710843207992",
-      });
-      console.log(fbAppId);
+      await Facebook.initializeAsync({ appId: fbAppId });
+
       const { token, type } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ["public_profile"],
+        permissions: ["public_profile", "email"],
       });
 
       if (type === "success") {
