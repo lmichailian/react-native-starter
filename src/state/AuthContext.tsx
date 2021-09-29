@@ -106,8 +106,8 @@ export function AuthProvider(props: any) {
       } else {
         console.log("Cancelled");
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      alert(err?.message);
       throw err;
     }
   }
