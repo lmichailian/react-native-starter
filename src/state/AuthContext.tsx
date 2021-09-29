@@ -91,11 +91,13 @@ export function AuthProvider(props: any) {
       await Facebook.initializeAsync({ appId: fbAppId });
 
       const { token, type } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ["public_profile", "email"],
+        permissions: ["public_profile", "email"]
       });
 
       if (type === "success") {
-        const credential = Firebase.auth.FacebookAuthProvider.credential(token);
+        const credential = await Firebase.auth.FacebookAuthProvider.credential(
+          token
+        );
         const facebookProfileData = await Firebase.auth().signInWithCredential(
           credential
         );
@@ -105,6 +107,7 @@ export function AuthProvider(props: any) {
         console.log("Cancelled");
       }
     } catch (err) {
+      console.log(err);
       throw err;
     }
   }
